@@ -1,0 +1,12 @@
+.include "8clocks.jsim"
+.include "nominal.jsim"
+.include "stdcell.jsim"
+
+Xinv1 clk1 xtra1 inverter
+Xinv2 xtra1 xtra2 inverter
+Xinv3 xtra2 out inverter
+
+.tran 50ns
+.plot clk1
+.plot xtra1
+.plot out

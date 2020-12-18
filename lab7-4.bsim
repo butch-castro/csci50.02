@@ -1,0 +1,14 @@
+.include beta.uasm
+
+	LD(R31, X, R0)
+	LD(R31, Y, R1)
+	LD(R31, Z, R2)
+
+	XOR(R0, R1, R2)
+
+end: HALT()
+
+.=0x400
+X: LONG(1)
+Y: LONG(0x11111111)
+Z: LONG(0)

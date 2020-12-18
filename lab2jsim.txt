@@ -1,0 +1,44 @@
+A1 OUTPUT = ABC + DE + FG
+
+.include "8clocks.jsim"
+.include "nominal.jsim"
+.include "stdcell.jsim"
+
+Xabc clk1 clk2 clk3  x1  nand3
+Xde  clk4 clk5       x2  nand2
+Xfg  clk6 clk7       x3  nand2
+Xout x1   x2   x3    out nand3
+
+.tran 640ns
+.plot clk1 clk2 clk3
+.plot clk4 clk5
+.plot clk6 clk7
+.plot out
+
+
+------------------------------------
+A2 Full adder
+
+.include "8clocks.jsim"
+.include "nominal.jsim"
+.include "stdcell.jsim"
+
+.subckt FA a b cin sum cout
+Xxor1 a b x1 xor2
+Xsum cin x1 sum xor2
+
+Xand1 x1 cin x2 nand2
+Xand2 a b x3 nand2
+Xcout x2 x3 cout nand2
+.ends
+
+Xsum clk1 clk2 clk3 sum cout FA
+
+.tran 40ns
+.plot clk1 
+.plot clk2
+.plot clk3
+.plot Xsum.sum
+.plot Xsum.cout
+
+

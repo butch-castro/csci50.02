@@ -1,0 +1,44 @@
+.include "8clocks.jsim"
+.include "nominal.jsim"
+.include "stdcell.jsim"
+
+.subckt FA a b cin sum cout
+Xxor1 a   b  x1  xor2
+Xsum  cin x1 sum xor2
+Xand1 x1 cin x2   nand2
+Xand2 a  b   x3   nand2
+Xcout x2 x3  cout nand2
+.ends
+
+
+*32-bit Adder
+.subckt ADD32 a[31:0] b[31:0] cin0 sum[31:0] cin[32:31] 
+Xx a[0:31] b[0:31] cin[0:31] sum[0:31] cin[1:32] FA
+.ends
+
+
+*32-bit Counter
+.subckt CTR32 a[31:0] clk f[31:0]
+
+Wreset reset nrz(0, 5, 5ns, 0ns, 0.001ns, 0.001ns) 1 0
+
+Xmux reset#32 f[31:0] 0#32 d[31:0] mux2 //Muiltplexer
+
+Xregist d[31:0] clk#32 q[31:0] dreg //Register
+
+Xadder q[31:0] a[31:0] 0 f[31:0] cin[32:31] ADD32 //32bit adder with input A
+
+.ends
+
+
+
+Xctr a[31:0] clk1 f[31:0] CTR32
+
+Wf a[31:0] nrz(0, 5, 5ns, 0ns, 0.001ns, 0.001ns) 1
+
+*Plot
+.tran 100ns
+.plot reset
+.plot f[31:0]
+.plot clk1
+

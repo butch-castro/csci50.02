@@ -1,0 +1,81 @@
+halfadder
+
+*necessary includes for all labs
+.include "8clocks.jsim"
+.include "nominal.jsim"
+.include "stdcell.jsim"
+
+*define actual circuit
+Xxor clk1 clk2 sum xor2
+Xand clk1 clk2 cout and2
+
+.tran 20ns
+.plot clk1
+.plot clk2
+.plot sum
+.plot cout
+
+
+-----------------------
+practice F = AB + CD
+
+*necessary includes for all labs
+.include "8clocks.jsim"
+.include "nominal.jsim"
+.include "stdcell.jsim"
+
+*define actual circuit
+Xand1 clk1 clk2 ab and2
+Xand2 clk3 clk4 cd and2
+Xor ab cd f or2
+
+
+.tran 80ns
+.plot clk1 clk2
+.plot clk3 clk4
+.plot f
+
+practice F = AB + CD (NAND version)
+
+*necessary includes for all labs
+.include "8clocks.jsim"
+.include "nominal.jsim"
+.include "stdcell.jsim"
+
+*define actual circuit
+Xand1 clk1 clk2 ab nand2
+Xand2 clk3 clk4 cd nand2
+Xor ab cd f nand2
+
+
+.tran 80ns
+.plot clk1 clk2
+.plot clk3 clk4
+.plot f
+
+--------------
+subck
+
+*necessary includes for all labs
+.include "8clocks.jsim"
+.include "nominal.jsim"
+.include "stdcell.jsim"
+
+*define actual circuit
+.subckt HA a b sum cout
+Xxor a b sum xor2
+Xand a b cout and2
+.ends
+
+Xha1 clk1 clk2 s1 c1 HA
+Xha2 clk1 clk3 s2 c2 HA
+Xha3 clk2 clk3 s3 c3 HA
+
+
+.tran 40ns
+.plot clk1 
+.plot clk2
+.plot clk3
+.plot s1 c1
+.plot s2 c2
+.plot s3 c3

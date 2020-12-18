@@ -1,0 +1,31 @@
+.include "8clocks.jsim"
+.include "nominal.jsim"
+.include "stdcell.jsim"
+
+.subckt FA a b cin sum cout
+Xxor1 a   b  x1  xor2
+Xsum  cin x1 sum xor2
+Xand1 x1 cin x2   nand2
+Xand2 a  b   x3   nand2
+Xcout x2 x3  cout nand2
+.ends
+
+.subckt ADD32 a[31:0] b[31:0] cin0 sum[31:0] cin[32:31]
+Xx a[0:31] b[0:31] cin[0:31] sum[0:31] cin[1:32] FA
+.ends
+
+Xstart x[31:0] y[31:0] 0 out[31:0] z[32:31] ADD32
+
+Wx x[31:0] nrz(0, 5, 20ns, 0ns, 0.001ns, 0.001ns)
++ 0x00000000 0x55555555 0x00000000 0x55555555 0xFFFFFFFF
++ 0xAAAAAAAA 0x00000000 0xAAAAAAAA 0x00000001 0xFFFFFFFF
+
+Wy y[31:0] nrz(0, 5, 20ns, 0ns, 0.001ns, 0.001ns)
++ 0x00000000 0x00000000 0x55555555 0x55555555 0xFFFFFFFF
++ 0x00000000 0xAAAAAAAA 0xAAAAAAAA 0xFFFFFFFF 0x00000001
+
+.tran 200ns
+.plot x[31:0]
+.plot y[31:0]
+.plot out[31:0]
+
